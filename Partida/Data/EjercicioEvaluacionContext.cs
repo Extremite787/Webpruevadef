@@ -1,18 +1,16 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Partida.Data;
 using Partida.Modelos;
 
 #nullable disable
 
 namespace Partida.ModelosNuevos
 {
-    public partial class EjercicioEvaluacionContext : DbContext
+    public partial class EjercicioEvaluacionContext : IdentityDbContext<AplicationUser, UserRoles, string>
     {
-        public EjercicioEvaluacionContext()
-        {
-        }
-
         public EjercicioEvaluacionContext(DbContextOptions<EjercicioEvaluacionContext> options)
             : base(options)
         {
