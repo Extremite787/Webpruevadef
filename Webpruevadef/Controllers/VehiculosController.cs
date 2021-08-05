@@ -43,7 +43,7 @@ namespace Webpruevadef.Controllers
         {
             try
             {
-                vehiculo.Codigo = 1;
+                vehiculo.Estado = 1;
                 _context.Add(vehiculo);
                 _context.SaveChanges();
 
@@ -86,7 +86,7 @@ namespace Webpruevadef.Controllers
         public ActionResult Desactivar(int id)
         {
             Vehiculo vehiculo = _context.Vehiculos.Where(x => x.Codigo == id).FirstOrDefault();
-            vehiculo.Codigo = 0;
+            vehiculo.Estado = 0;
             _context.Update(vehiculo);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -94,7 +94,7 @@ namespace Webpruevadef.Controllers
         public ActionResult Activar(int id)
         {
             Vehiculo vehiculo = _context.Vehiculos.Where(x => x.Codigo == id).FirstOrDefault();
-            vehiculo.Codigo = 1;
+            vehiculo.Estado = 1;
             _context.Update(vehiculo);
             _context.SaveChanges();
             return RedirectToAction("Index");

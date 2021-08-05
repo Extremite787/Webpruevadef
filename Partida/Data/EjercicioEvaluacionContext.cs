@@ -35,8 +35,6 @@ namespace Partida.ModelosNuevos
 
                 entity.ToTable("TipoVehiculo");
 
-                entity.Property(e => e.Codigo).ValueGeneratedNever();
-
                 entity.Property(e => e.Descripcion)
                     .IsRequired()
                     .HasMaxLength(100)
@@ -55,8 +53,6 @@ namespace Partida.ModelosNuevos
                     .HasName("PK__Vehiculo__06370DAD2CC81A0F");
 
                 entity.ToTable("Vehiculo");
-
-                entity.Property(e => e.Codigo).ValueGeneratedNever();
 
                 entity.Property(e => e.Nombre)
                     .IsRequired()

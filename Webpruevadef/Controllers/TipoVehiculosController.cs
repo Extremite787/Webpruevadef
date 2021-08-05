@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Partida.Modelos;
 using Partida.ModelosNuevos;
+using Partida.ViewModel;
 
 namespace Webpruevadef.Controllers
 {
@@ -15,6 +17,15 @@ namespace Webpruevadef.Controllers
         public TipoVehiculosController(EjercicioEvaluacionContext context)
         {
             _context = context;
+        }
+        public void Combox()
+        {
+            ViewData["CodigoVehiculo"] = new SelectList(_context.Vehiculos.Select(x => new Vehiculoscuenta()
+            { 
+                Codigo = x.Codigo,
+                Nombre = $"{x.Nombre}",
+                Estado = x.Estado
+            }).Where(s=>s.Estado ==1).ToList(),"Codigo","Nombre");
         }
         // GET: TipoVehiculosController
         public ActionResult Index()
@@ -26,70 +37,83 @@ namespace Webpruevadef.Controllers
         // GET: TipoVehiculosController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            TipoVehiculo tipoVehiculo = _context.TipoVehiculos.Where(x => x.Codigo == id).FirstOrDefault();
+            return View(tipoVehiculo);
         }
 
         // GET: TipoVehiculosController/Create
         public ActionResult Create()
         {
+            Combox();
             return View();
         }
 
         // POST: TipoVehiculosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(TipoVehiculo tipoVehiculo)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                tipoVehiculo.Estado = 1;
+                _context.Add(tipoVehiculo);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                Combox();
+                return View(tipoVehiculo);
             }
         }
 
         // GET: TipoVehiculosController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Combox();
+            TipoVehiculo tipoVehiculo = _context.TipoVehiculos.Where(x => x.Codigo == id).FirstOrDefault();
+            return View(tipoVehiculo);
         }
 
         // POST: TipoVehiculosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, TipoVehiculo tipoVehiculo)
         {
+            if (id != tipoVehiculo.Codigo)
+            {
+                return RedirectToAction("Index");
+            }
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.Update(tipoVehiculo);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                Combox();
+                return View(tipoVehiculo);
             }
         }
 
         // GET: TipoVehiculosController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Desactivar(int id)
         {
-            return View();
+            TipoVehiculo tipoVehiculo = _context.TipoVehiculos.Where(x => x.Codigo == id).FirstOrDefault();
+            tipoVehiculo.Estado = 0;
+            _context.Update(tipoVehiculo);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
-
-        // POST: TipoVehiculosController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Activar(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            TipoVehiculo tipoVehiculo = _context.TipoVehiculos.Where(x => x.Codigo == id).FirstOrDefault();
+            tipoVehiculo.Estado = 1;
+            _context.Update(tipoVehiculo);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
