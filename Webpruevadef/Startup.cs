@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Partida.Data;
 using Partida.ModelosNuevos;
 using Webpruevadef.Data;
 
@@ -33,8 +34,18 @@ namespace Webpruevadef
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<AplicationUser, UserRoles>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<EjercicioEvaluacionContext>();
+            services.ConfigureApplicationCookie(op => 
+            {
+                op.Cookie.HttpOnly = true;
+                op.ExpireTimeSpan = TimeSpan.FromSeconds(10);
+                op.LoginPath = "/Identity/Account/Login";
+                op.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                op.SlidingExpiration = true;
+            });
+
+            services.AddRazorPages();
             services.AddControllersWithViews();
         }
 

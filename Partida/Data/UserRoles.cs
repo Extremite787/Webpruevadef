@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Partida.Data
 {
-    public class UserRoles : IdentityUser
+    public class UserRoles : IdentityRole
     {
     }
 }

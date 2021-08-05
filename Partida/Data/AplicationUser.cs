@@ -9,8 +9,5 @@ namespace Partida.Data
 {
     public class AplicationUser : IdentityUser
     {
-        public class UserRoles
-        {
-        }
     }
 }
